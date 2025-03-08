@@ -6,11 +6,13 @@ import Link from "next/link";
 import { FaTrash } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
 import { CartItem } from "@/types/type";
+import CheckoutButton from "@/components/cart/CheckoutButton";
 
 const CartPage = () => {
     const { token, username } = useAuth();
     const [loading, setLoading] = useState(true);
     const [cartDetails, setCartDetails] = useState<CartItem[]>([]);
+    const [userId, setUserId] = useState<number>(0);
 
     useEffect(() => {
         if (!username) return;
@@ -27,6 +29,7 @@ const CartPage = () => {
                 const cartDetailData = await cartDetailResponse.json();
 
                 setCartDetails(cartDetailData);
+                setUserId(userData.id);
             } catch (error) {
                 console.error("Error occurred while fetching cart items.", error);
             } finally {
@@ -39,7 +42,7 @@ const CartPage = () => {
 
     // อัปเดตจำนวนสินค้า
     // อัปเดตจำนวนสินค้าและอัปเดต state หลังจาก API ตอบกลับ
-    const updateQuantity = async (cartItemId: number, productId: number, quantity: number, stock :number) => {
+    const updateQuantity = async (cartItemId: number, productId: number, quantity: number, stock: number) => {
         try {
 
             const currentItem = cartDetails.find(item => item.cart.id === cartItemId && item.product.id === productId);
@@ -160,11 +163,7 @@ const CartPage = () => {
                     {/* Total & Checkout */}
                     <div className="flex justify-between mt-6">
                         <p className="text-lg font-semibold">Total: ${totalPrice.toFixed(2)}</p>
-                        <Link href="/checkout">
-                            <button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
-                                Proceed to Checkout
-                            </button>
-                        </Link>
+                        <CheckoutButton userId={userId}/>
                     </div>
                 </div>
             )}
@@ -173,3 +172,5 @@ const CartPage = () => {
 };
 
 export default CartPage;
+
+

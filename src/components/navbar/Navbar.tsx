@@ -8,7 +8,7 @@ const Navbar = () => {
         <nav className="flex justify-between items-center py-6 bg-white border-b-2 border-gray-200 px-20 bgred">
             <div className="flex items-center">
                 {/* <img src="logo.png" alt="Furniro Logo" className="w-10 h-10" /> */}
-                <span className="text-2xl font-bold text-black ml-2">Furniro</span>
+                <span className="text-2xl font-bold text-black ml-2">GearUp</span>
             </div>
             <LinkMenu />
 
