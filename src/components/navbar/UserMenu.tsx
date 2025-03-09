@@ -71,7 +71,9 @@ const UserDropdownMenu = ({ username, handleLogout }: { username: string; handle
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>Profile</DropdownMenuItem>
+                <Link href={"/history"}>
                 <DropdownMenuItem>Billing</DropdownMenuItem>
+                </Link>
                 <DropdownMenuItem>Team</DropdownMenuItem>
                 <DropdownMenuItem>Subscription</DropdownMenuItem>
                 <DropdownMenuSeparator />

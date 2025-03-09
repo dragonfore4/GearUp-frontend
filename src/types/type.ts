@@ -7,7 +7,7 @@ export type ProductType = {
     imageUrl: string | null;
 };
 
-export type Role =  {
+export type Role = {
     id: number;
     name: string;
 }
@@ -25,7 +25,7 @@ export type Cart = {
     user: User;
 }
 
-export type Product= {
+export type Product = {
     id: number;
     name: string;
     description: string;
@@ -39,12 +39,27 @@ export type CartItemId = {
     cartId: number;
 }
 
-export type CartItem  = {
+export type CartItem = {
     id: CartItemId;
     cart: Cart;
     product: Product;
     quantity: number;
 }
 
-// Define an array of CartItem
-export type CartData = CartItem[];
+export type Order = {
+    id: number;
+    status: string;
+    totalPrice: number;
+    user: User;
+}
+
+export type OrderDetail = {
+    id: {
+        sequenceId: number;
+        orderId: number;
+    };
+    order: Order;
+    product: Product;
+    quantity: number;
+    price: number;
+}
