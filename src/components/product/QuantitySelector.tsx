@@ -50,6 +50,8 @@ const QuantitySelector = ({ productId, stock }: { productId: number, stock: numb
             if (addToCartResponse.ok) {
                 const addToCartData = await addToCartResponse.json();
                 toast.success("Product added to cart");
+                // toast.success("test");
+                
                 console.log(addToCartData);
 
             }

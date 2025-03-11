@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { signinAction } from '../actions/action';
 
 
-
 const SignInPage = () => {
     return (
         <div className="min-h-screen bg-gray-100 flex items-center justify-center">

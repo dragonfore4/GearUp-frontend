@@ -47,7 +47,7 @@ const HistoryPage = () => {
             <div className='space-y-4'>
                 {orders.length > 0 ? orders.map((order, index) => (
                     <div className='border rounded-lg p-4 bg-white shadow' key={index}>
-                        <div className='flex justify-between items-center cursor-pointer' onClick={() => handleOpenOrderDetail(index, order.id)}>
+                        <div className={`flex justify-between items-center cursor-pointer mb-0 ${expanded != null && expanded == index ? "mb-2" : ""}`} onClick={() => handleOpenOrderDetail(index, order.id)}>
                             <div className='flex gap-8'>
                                 <span className='font-semibold'>Order #{order.id} - {order.status}</span>
                                 <span className='font-semibold'>Total price ${order.totalPrice}</span>
@@ -56,8 +56,8 @@ const HistoryPage = () => {
                             <button className='text-blue-500'>{expanded === index ? 'Hide' : 'View'} Details</button>
                         </div>
                         {expanded === index && orderDetail && orderDetail.map((detail, index) => (
-                            <div key={index} className='mt-2 p-2 border-t flex flex-col'>
-                                <div className='flex justify-between items-center bg-red-00'>
+                            <div key={index} className='py-2 px-2 border-t bg-green-00 h-full'>
+                                <div className=' bg-red-00 flex justify-between items-center h-full'>
                                     <span className='font-semibold'>{detail.product.name}</span>
                                     <span className='font-semibold'>${detail.product.price} x {detail.quantity} = {detail.product.price * detail.quantity}</span>
                                 </div>

@@ -19,7 +19,10 @@ const CartPage = () => {
 
         const fetchCartItems = async () => {
             try {
-                const userResponse = await fetch(`http://localhost:8080/api/users/username/${username}`);
+                const userResponse = await fetch(`http://localhost:8080/api/users/username/${username}`, {
+                    method: "GET",
+                    credentials: "include"
+                });
                 const userData = await userResponse.json();
 
                 const cartResponse = await fetch(`http://localhost:8080/api/carts/${userData.id}`);

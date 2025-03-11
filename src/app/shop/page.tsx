@@ -1,8 +1,13 @@
 import React from 'react'
 import Image from 'next/image'
 import ProductContainer from '@/components/product/ProductContainer'
+import FilterProducts from '@/components/product/FilterProducts';
 
-const ShopPage = () => {
+const ShopPage = async (
+    { searchParams }: { searchParams: { limit?: number, page?: number, minPrice?: number, maxPrice?:number } }
+) => {
+
+    const { limit, page, minPrice, maxPrice } = await searchParams;
     return (
         <div>
             <div className="h-60 relative bg-red-00 flex flex-col justify-center items-center">
@@ -13,8 +18,8 @@ const ShopPage = () => {
                 <p className='text-xl font-medium mt-4 z-10'>Home &gt; <span className='font-normal'>Shop</span></p>
             </div>
             <div className='containerbox'>
-                <ProductContainer slice={100}/>
-
+                <FilterProducts />
+                <ProductContainer slice={100} page={page} minPrice={minPrice} maxPrice={maxPrice} />
             </div>
         </div>
     )

@@ -57,7 +57,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                     method: "GET",
                     headers: {
                         "Authorization": `Bearer ${data.token}`  // ✅ ใช้ data.token แทน token
-                    }
+                    },
+                    credentials: "include"
                 });
     
                 const claimsData = await claimsResponse.json();

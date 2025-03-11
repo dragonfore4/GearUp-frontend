@@ -1,10 +1,13 @@
 "use client";
+import { useAuth } from '@/app/context/AuthContext';
 import { linksPage } from '@/utils/linksPage';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 
-const LinkMenu= () => {
+const LinkMenu = () => {
+
+    const { username } = useAuth();
     const pathname = usePathname();
     const [selected, setSelected] = useState<String>(pathname);
 
@@ -30,6 +33,9 @@ const LinkMenu= () => {
                     </li>
                 </Link>
             ))}
+            {username && username === "test4" && (
+                <Link href={"/addProduct"} className='text-lg text-black cursor-pointer'>Add Product</Link>
+            )}
         </ul>
     );
 };

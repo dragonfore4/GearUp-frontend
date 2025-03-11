@@ -1,3 +1,4 @@
+import FeaturedProducts from "@/components/product/FeaturedProducts";
 import ProductContainer from "@/components/product/ProductContainer";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,9 +15,9 @@ export default function Home() {
                 {/* FEATURED PRODUCTS */}
                 <div className="mt-8 bg-red-00 flex justify-between items-center">
                     <h2 className="text-3xl font-bold text-center">Featured Products</h2>
-                    <Link href={"/shop"} className="text-sm">View all</Link>
+                    <Link href={"/shop"} className="text-sm hover:text-blue-500">View all</Link>
                 </div>
-                <ProductContainer />
+                <FeaturedProducts/>
 
             </div>
         </div>
