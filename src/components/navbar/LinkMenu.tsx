@@ -33,8 +33,11 @@ const LinkMenu = () => {
                     </li>
                 </Link>
             ))}
-            {username && username === "test4" && (
-                <Link href={"/addProduct"} className='text-lg text-black cursor-pointer'>Add Product</Link>
+            {username && (username === "test4" || username === "admin") && (
+                <>
+                    <Link href={"/addProduct"} className='text-lg text-black cursor-pointer'>Add Product</Link>
+                    <Link href={"/admin"} className='text-lg text-black cursor-pointer'>Admin</Link>
+                </>
             )}
         </ul>
     );

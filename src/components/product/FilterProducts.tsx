@@ -16,7 +16,9 @@ const FilterProducts = () => {
         const params = new URLSearchParams(searchParams);
         params.set(name, value);
         console.log(params);
-        router.push(`${pathname}?${params}`);
+        router.push(`${pathname}?${params}`, {
+            scroll: false
+        });
 
         
     }

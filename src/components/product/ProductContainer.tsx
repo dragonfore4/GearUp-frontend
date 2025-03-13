@@ -31,10 +31,12 @@ const ProductContainer = async ({
     }
     const products = await response.json();
     if (products.totalItems === 0) {
-        return <div className="text-red-500">No products found</div>;
+        return (<div className="flex flex-col items-center justify-center py-10 space-y-4">
+            <h2 className="text-xl font-semibold text-gray-700">No products found</h2>
+            <p className="text-gray-500">Try searching for something else or browse our categories.</p>
+        </div>
+        );
     }
-    console.log(products);
-    // console.log(minPrice);
 
     const totalProducts = products.totalItems;
     const totalPages = products.totalPages;
@@ -42,9 +44,9 @@ const ProductContainer = async ({
 
     return (
 
-        <div>
-            {/* <div className='bg-green-00  py-2 flex flex-wrap justify-between gap-20 '> */}
-            <div className='bg-green-00 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 py-2  gap-20 '>
+        <div className='mt-12 w-full'>
+            {/* <div className='bg-green-00 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 py-2  gap-20 bg-green-200'> */}
+            <div className='flex gap-x-8 gap-y-16 justify-between flex-wrap w-full'>
                 {displayedProducts.map((product: ProductType, index: number) => (
                     <ProductCard key={index} product={product} />
                 ))}

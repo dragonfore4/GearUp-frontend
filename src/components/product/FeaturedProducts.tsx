@@ -5,7 +5,7 @@ import { ProductType } from '@/types/type';
 const PRODUCTS_PER_PAGE = 12;
 
 const FeaturedProducts = async ({
-    slice = 3,
+    slice = 6,
 }: {
     slice?: number,
 }) => {

@@ -17,7 +17,7 @@ const ShopPage = async (
                 <p className='text-6xl font-semibold z-10'>Shop</p>
                 <p className='text-xl font-medium mt-4 z-10'>Home &gt; <span className='font-normal'>Shop</span></p>
             </div>
-            <div className='containerbox'>
+            <div className='containerbox bg-red-00'>
                 <FilterProducts />
                 <ProductContainer slice={100} page={page} minPrice={minPrice} maxPrice={maxPrice} />
             </div>

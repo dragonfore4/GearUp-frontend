@@ -26,12 +26,22 @@ export const signinAction = async (prevState: unknown, formData: FormData): Prom
 
 export const signupAction = async (prevState: unknown, formData: FormData): Promise<any> => {
 
-    const name = formData.get("name");
+    const username = formData.get("username");
     const email = formData.get("email");
     const password = formData.get("password");
+    console.log("Extracted values:", { username, password, email });
+    const response = await fetch("http://localhost:8080/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, email, password }),
+        credentials: "include"
+    })
 
-    console.log("Extracted values:", { name, email, password });
+    const data = await response.json();
+    if (!response.ok) {
+        return { message: data.message };
+    }
 
-    return { message: "ok" };
+    return { message: data.message};
 };
 

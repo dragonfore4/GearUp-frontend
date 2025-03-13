@@ -36,6 +36,10 @@ const QuantitySelector = ({ productId, stock }: { productId: number, stock: numb
             const cartResponse = await fetch(`http://localhost:8080/api/carts/${userData.id}`);
             const cartData = await cartResponse.json();
 
+            if (quantity > stock) {
+                toast.error("Quantity exceeds stock");
+                return;
+            }
             const addToCartResponse = await fetch(`http://localhost:8080/api/cartDetail/${cartData.id}/addProduct`, {
                 method: "POST",
                 headers: {

@@ -94,15 +94,16 @@ const CartPage = () => {
 
 
     // ลบสินค้าออกจากตะกร้า
-    const removeItem = async (cartItemId: number, productId: number) => {
-        setCartDetails(prevCart => prevCart.filter(item => item.id.sequenceId !== cartItemId));
-
-        await fetch(`http://localhost:8080/api/cartDetail${cartItemId}/removeProduct?productId=${productId}`, {
+    const removeItem = async (cartId: number, productId: number) => {
+        
+        await fetch(`http://localhost:8080/api/cartDetail/${cartId}/removeProduct?productId=${productId}`, {
             method: "DELETE",
             headers: {
                 "Authorization": `Bearer ${token}`,
             },
+            credentials: "include"
         });
+        setCartDetails(prevCart => prevCart.filter(item => item.product.id !== productId));
     };
 
     // คำนวณราคารวม
