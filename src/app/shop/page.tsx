@@ -4,10 +4,10 @@ import ProductContainer from '@/components/product/ProductContainer'
 import FilterProducts from '@/components/product/FilterProducts';
 
 const ShopPage = async (
-    { searchParams }: { searchParams: { limit?: number, page?: number, minPrice?: number, maxPrice?:number } }
+    { searchParams }: { searchParams: { limit?: number, page?: number, minPrice?: number, maxPrice?:number, productTypeId?: number } }
 ) => {
 
-    const { limit, page, minPrice, maxPrice } = await searchParams;
+    const { limit, page, minPrice, maxPrice, productTypeId } = await searchParams;
     return (
         <div>
             <div className="h-60 relative bg-red-00 flex flex-col justify-center items-center">
@@ -19,7 +19,7 @@ const ShopPage = async (
             </div>
             <div className='containerbox bg-red-00'>
                 <FilterProducts />
-                <ProductContainer slice={100} page={page} minPrice={minPrice} maxPrice={maxPrice} />
+                <ProductContainer slice={100} page={page} minPrice={minPrice} maxPrice={maxPrice} productTypeId={productTypeId} />
             </div>
         </div>
     )
