@@ -1,5 +1,5 @@
-// "use client";
-"use server";
+"use client";
+// "use server";
 
 // Define the server action for form submission
 export const signinAction = async (prevState: unknown, formData: FormData): Promise<any> => {
