@@ -1,10 +1,5 @@
 "use client"
 import AllProject from '@/components/admin/AllProject'
-// import AllProject from '@/components/default/(admin)/AllProject'
-// import ApprovedProject from '@/components/default/(admin)/ApprovedProject'
-// import PendingProjects from '@/components/default/(admin)/PendingProjects'
-// import Transactions from '@/components/default/(admin)/Transactions'
-// import UsersList from '@/components/default/(admin)/UsersList'
 import React, { useState } from 'react'
 
 const AdminPage = () => {
@@ -15,7 +10,6 @@ const AdminPage = () => {
         {
             name: "All Products",
             page: <AllProject />
-            // page: <AllProject/>
         }, {
             name: "Approved Products",
             // page: <ApprovedProject/>

@@ -23,14 +23,6 @@ const CartItemPreview = ({ cartItem }: { cartItem: CartItem }) => {
                 <p className="text-xs text-gray-500">x{cartItem.quantity}</p>
                 <p className="text-sm font-semibold">${(cartItem.product.price * cartItem.quantity).toFixed(2)}</p>
             </div>
-
-            {/* Remove Button */}
-            {/* <button
-                className="text-red-500 hover:text-red-700"
-                onClick={() => onRemove(id)}
-            >
-                <FaTrash size={14} />
-            </button> */}
         </div>
     );
 };

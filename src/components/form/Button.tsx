@@ -9,7 +9,6 @@ export const SubmitButton = ({ name, text, className, icon }: { name: string, te
 
         <button
             type="submit"
-            // className={`w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition duration-200 ${pending ? "bg-gray-300 hover:bg-gray-400" : "cursor-pointer"}`}
             className={className}
             name={name}
             disabled={pending}
