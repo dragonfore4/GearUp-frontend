@@ -261,7 +261,7 @@
 
 
 "use client";
-import { SubmitButton } from '@/components/form/Button';
+import { SubmitButton, SubmitButtonClient } from '@/components/form/Button';
 import React, { useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { SourceTextModule } from 'vm';
@@ -449,20 +449,7 @@ const AddProductPage = () => {
                     </div>
 
                     <div className="flex justify-end pt-4">
-                        {/* <button
-                            type="button"
-                            className="mr-4 px-6 py-2.5 border border-gray-300 text-gray-700 font-medium rounded-md hover:bg-gray-50"
-                            onClick={() => window.location.href = '/products'}
-                        >
-                            Cancel
-                        </button> */}
-                        {/* <button
-                            type="submit"
-                            className="px-6 py-2.5 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                        >
-                            Add Product
-                        </button> */}
-                        <SubmitButton name={''} text={'submit'} loading={loading}/>
+                        <SubmitButtonClient name={''} text={'submit'} loading={loading}/>
                     </div>
                 </form>
             </div>

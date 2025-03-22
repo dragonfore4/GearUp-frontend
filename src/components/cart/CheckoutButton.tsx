@@ -27,7 +27,7 @@ const CheckoutButton = ({ userId = 3 }: { userId?: number }) => {
 
             if (response.ok) {
                 toast.success("Checkout successful!");
-                window.location.reload();
+                // window.location.reload();
             } else {
                 toast.error("Failed to checkout.");
             }

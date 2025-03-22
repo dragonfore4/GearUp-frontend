@@ -65,7 +65,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 setUsername(claimsData.sub);
                 // console.log("Claims data: ", claimsData);
             } catch (error) {
-                console.error("Failed to fetch authentication data:", error);
+                // console.error("Failed to fetch authentication data:", error);
+                return;
             }
         };
     

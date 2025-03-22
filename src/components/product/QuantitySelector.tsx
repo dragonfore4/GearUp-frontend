@@ -1,5 +1,5 @@
 "use client";
-import { useAuth } from "@/app/context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 import React, { useState } from "react";
 import { toast } from "sonner"
 
@@ -55,7 +55,7 @@ const QuantitySelector = ({ productId, stock }: { productId: number, stock: numb
                 const addToCartData = await addToCartResponse.json();
                 toast.success("Product added to cart");
                 // toast.success("test");
-                
+
                 console.log(addToCartData);
 
             }
@@ -75,8 +75,8 @@ const QuantitySelector = ({ productId, stock }: { productId: number, stock: numb
             </div>
 
             {/* Add to Cart Button */}
-            <button className="border border-black px-6 py-2 rounded-md font-semibold cursor-pointer hover:bg-black hover:text-white transition-all duration-300" onClick={handleSubmit}>
-                Add To Cart
+            <button className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full font-medium shadow-md hover:shadow-lg transition duration-300 hover:scale-105" onClick={handleSubmit}>
+                Add to Cart
             </button>
 
             {/* Compare Button */}

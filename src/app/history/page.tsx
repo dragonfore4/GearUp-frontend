@@ -1,7 +1,112 @@
-"use client"
-import React, { useEffect, useState } from 'react'
-import { useAuth } from '../context/AuthContext';
+// "use client";
+// import React, { useEffect, useState } from 'react';
+// import { Order, OrderDetail } from '@/types/type';
+// import { useAuth } from '@/context/AuthContext';
+
+// const HistoryPage = () => {
+//     const { token, username } = useAuth();
+//     const [userId, setUserId] = useState<number | null>(null);
+//     const [orders, setOrders] = useState<Order[]>([]);
+//     const [expanded, setExpanded] = useState<number | null>(null);
+//     const [orderDetail, setOrderDetail] = useState<OrderDetail[] | null>(null);
+
+//     useEffect(() => {
+//         const fetchUserId = async () => {
+//             if (!token || !username) return;
+
+//             const userIdResponse = await fetch(`http://localhost:8080/api/users/username/${username}`);
+//             const userIdData = await userIdResponse.json();
+//             setUserId(userIdData.id);
+
+//             const orderResponse = await fetch(`http://localhost:8080/api/orders/user/${userIdData.id}`);
+//             const orderData = await orderResponse.json();
+//             setOrders(orderData);
+//         };
+
+//         fetchUserId();
+//     }, [token, username]);
+
+//     const handleOpenOrderDetail = async (index: number, orderId: number) => {
+//         try {
+//             const orderDetailResponse = await fetch(`http://localhost:8080/api/orders/${orderId}/details`);
+//             const orderDetailData = await orderDetailResponse.json();
+//             setOrderDetail(orderDetailData);
+//         } catch (error) {
+//             console.error("Error fetching order details:", error);
+//         }
+
+//         setExpanded(expanded === index ? null : index);
+//     };
+
+//     console.log(orderDetail)
+//     return (
+//         <div className="max-w-5xl mx-auto px-4 py-12">
+//             <h2 className="text-3xl font-extrabold text-gray-900 mb-8">Transaction History</h2>
+//             <div className="space-y-6">
+//                 {orders.length > 0 ? (
+//                     orders.map((order, index) => (
+//                         <div
+//                             key={index}
+//                             // className="bg-white rounded-xl shadow-md border hover:border-indigo-400 transition duration-300"
+//                             className="overflow-clip bg-white rounded-xl shadow-md border border-gray-200 hover:border-indigo-400 transition duration-300"
+//                         >
+//                             <div
+//                                 onClick={() => handleOpenOrderDetail(index, order.id)}
+//                                 className="flex justify-between items-center px-6 py-4 cursor-pointer"
+//                             >
+//                                 <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6">
+//                                     <span className="text-base sm:text-lg font-semibold text-gray-800">
+//                                         Order #{index + 1}
+//                                     </span>
+//                                     <span className="text-sm text-gray-500">Status: {order.status}</span>
+//                                     <span className="text-sm font-medium text-indigo-600">
+//                                         Total: ${order.totalPrice.toFixed(2)}
+//                                     </span>
+//                                 </div>
+//                                 <button className="text-indigo-600 hover:underline font-medium text-sm sm:text-base">
+//                                     {expanded === index ? 'Hide' : 'View'} Details
+//                                 </button>
+//                             </div>
+
+//                             {expanded === index && orderDetail && (
+//                                 <div className="bg-gray-50 px-6 py-4 space-y-3 border-t">
+//                                     {orderDetail.map((detail, detailIndex) => (
+//                                         <div
+//                                             key={detailIndex}
+//                                             className="flex justify-between items-center text-sm sm:text-base"
+//                                         >
+//                                             <span className="font-medium text-gray-800">
+//                                                 {detail.product.name}
+//                                             </span>
+//                                             <span className="text-gray-600">
+//                                                 ${detail.product.price.toFixed(2)} x {detail.quantity} ={' '}
+//                                                 <span className="font-semibold text-gray-900">
+//                                                     ${(detail.product.price * detail.quantity).toFixed(2)}
+//                                                 </span>
+//                                             </span>
+//                                         </div>
+//                                     ))}
+//                                 </div>
+//                             )}
+//                         </div>
+//                     ))
+//                 ) : (
+//                     <div className="text-center text-gray-600 text-base bg-white p-6 rounded-lg shadow">
+//                         You have no past orders.
+//                     </div>
+//                 )}
+//             </div>
+//         </div>
+//     );
+// };
+
+// export default HistoryPage;
+
+"use client";
+import React, { useEffect, useState } from 'react';
 import { Order, OrderDetail } from '@/types/type';
+import { useAuth } from '@/context/AuthContext';
+import { FaChevronDown, FaChevronUp, FaHistory, FaSpinner } from 'react-icons/fa';
 
 const HistoryPage = () => {
     const { token, username } = useAuth();
@@ -9,62 +114,200 @@ const HistoryPage = () => {
     const [orders, setOrders] = useState<Order[]>([]);
     const [expanded, setExpanded] = useState<number | null>(null);
     const [orderDetail, setOrderDetail] = useState<OrderDetail[] | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [detailLoading, setDetailLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchUserId = async () => {
             if (!token || !username) return;
-            console.log("username: ", username);
-            const userIdResponse = await fetch(`http://localhost:8080/api/users/username/${username}`);
-            const userIdData = await userIdResponse.json();
-            setUserId(userIdData.id);
 
-            const orderResponse = await fetch(`http://localhost:8080/api/orders/user/${userIdData.id}`);
-            const orderData = await orderResponse.json();
-            console.log(orderData);
-            setOrders(orderData);
+            try {
+                setLoading(true);
+                const userIdResponse = await fetch(`http://localhost:8080/api/users/username/${username}`);
+
+                if (!userIdResponse.ok) {
+                    throw new Error('Failed to fetch user information');
+                }
+
+                const userIdData = await userIdResponse.json();
+                setUserId(userIdData.id);
+
+                const orderResponse = await fetch(`http://localhost:8080/api/orders/user/${userIdData.id}`);
+
+                if (!orderResponse.ok) {
+                    throw new Error('Failed to fetch orders');
+                }
+
+                const orderData = await orderResponse.json();
+                setOrders(orderData);
+            } catch (error) {
+                setError(error instanceof Error ? error.message : 'An unknown error occurred');
+            } finally {
+                setLoading(false);
+            }
         };
 
         fetchUserId();
     }, [token, username]);
 
     const handleOpenOrderDetail = async (index: number, orderId: number) => {
-        try {
-            const orderDetailResponse = await fetch(`http://localhost:8080/api/orders/${orderId}/details`);
-            const orderDetailData = await orderDetailResponse.json();
-            console.log("inisorder: ", orderDetailData);
-            setOrderDetail(orderDetailData); // ✅ React will update state asynchronously
-        } catch (error) {
-            console.error("Error fetching order details:", error);
+        // If already expanded, just close it
+        if (expanded === index) {
+            setExpanded(null);
+            return;
         }
 
-        setExpanded(expanded === index ? null : index);
+        try {
+            setDetailLoading(true);
+            const orderDetailResponse = await fetch(`http://localhost:8080/api/orders/${orderId}/details`);
+
+            if (!orderDetailResponse.ok) {
+                throw new Error('Failed to fetch order details');
+            }
+
+            const orderDetailData = await orderDetailResponse.json();
+            setOrderDetail(orderDetailData);
+            setExpanded(index);
+        } catch (error) {
+            console.error("Error fetching order details:", error);
+            setError(error instanceof Error ? error.message : 'Failed to load order details');
+        } finally {
+            setDetailLoading(false);
+        }
     };
 
+    const formatDate = (dateString: string) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    };
 
     return (
-        <div className='max-w-4xl mx-auto p-4'>
-            <h2 className='text-2xl font-bold mb-4'>Transaction History</h2>
-            <div className='space-y-4'>
-                {orders.length > 0 ? orders.map((order, index) => (
-                    <div className='border rounded-lg p-4 bg-white shadow' key={index}>
-                        <div className={`flex justify-between items-center cursor-pointer mb-0 ${expanded != null && expanded == index ? "mb-2" : ""}`} onClick={() => handleOpenOrderDetail(index, order.id)}>
-                            <div className='flex gap-8'>
-                                <span className='font-semibold'>Order #{order.id} - {order.status}</span>
-                                <span className='font-semibold'>Total price ${order.totalPrice}</span>
+        <div className="bg-gray-50 font-sans min-h-screen">
+            <div className="relative bg-gradient-to-r from-indigo-800 to-purple-900 py-16">
+                <div className="absolute inset-0 bg-black/30"></div>
+                <div className="relative max-w-5xl mx-auto px-4 text-center">
+                    <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight">
+                        Your Order History
+                    </h1>
+                    <p className="mt-4 text-lg text-indigo-100 max-w-3xl mx-auto">
+                        Track all your purchases and manage your GearUp experience
+                    </p>
+                </div>
+            </div>
 
-                            </div>
-                            <button className='text-blue-500'>{expanded === index ? 'Hide' : 'View'} Details</button>
-                        </div>
-                        {expanded === index && orderDetail && orderDetail.map((detail, index) => (
-                            <div key={index} className='py-2 px-2 border-t bg-green-00 h-full'>
-                                <div className=' bg-red-00 flex justify-between items-center h-full'>
-                                    <span className='font-semibold'>{detail.product.name}</span>
-                                    <span className='font-semibold'>${detail.product.price} x {detail.quantity} = {detail.product.price * detail.quantity}</span>
+            <div className="max-w-5xl mx-auto px-4 py-12">
+                {loading ? (
+                    <div className="flex justify-center items-center py-20">
+                        <FaSpinner className="animate-spin text-4xl text-indigo-600" />
+                    </div>
+                ) : error ? (
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-6 py-5 rounded-lg">
+                        <p className="font-medium">{error}</p>
+                        <p className="mt-2">Please try again later or contact support if the problem persists.</p>
+                    </div>
+                ) : orders.length > 0 ? (
+                    <div className="space-y-6">
+                        {orders.map((order, index) => (
+                            <div
+                                key={order.id}
+                                className="bg-white rounded-xl shadow-md border border-gray-200 hover:border-indigo-400 transition-all duration-300 overflow-hidden"
+                            >
+                                <div
+                                    onClick={() => handleOpenOrderDetail(index, order.id)}
+                                    className="flex justify-between items-center px-6 py-5 cursor-pointer"
+                                >
+                                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6">
+                                        <span className="text-base sm:text-lg font-semibold text-gray-800">
+                                            Order #{order.id}
+                                        </span>
+                                    
+                                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${order.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
+                                            order.status === 'PROCESSING' ? 'bg-blue-100 text-blue-800' :
+                                                order.status === 'CANCELLED' ? 'bg-red-100 text-red-800' :
+                                                    'bg-gray-100 text-gray-800'
+                                            }`}>
+                                            {order.status}
+                                        </span>
+                                        <span className="text-sm font-medium text-indigo-600">
+                                            ${order.totalPrice.toFixed(2)}
+                                        </span>
+                                    </div>
+                                    <div className="flex items-center gap-2 text-indigo-600">
+                                        {detailLoading && expanded === null ? (
+                                            <FaSpinner className="animate-spin" />
+                                        ) : (
+                                            <>
+                                                {expanded === index ? <FaChevronUp /> : <FaChevronDown />}
+                                                <span className="hover:underline font-medium text-sm sm:text-base">
+                                                    {expanded === index ? 'Hide' : 'View'} Details
+                                                </span>
+                                            </>
+                                        )}
+                                    </div>
                                 </div>
+
+                                {expanded === index && orderDetail && (
+                                    <div className="bg-gray-50 px-6 py-5 space-y-4 border-t border-gray-200 animate-fade-in ">
+                                        <h3 className="font-semibold text-gray-800 text-lg">Order Items</h3>
+                                        <div className="divide-y divide-gray-200">
+                                            {orderDetail.map((detail, detailIndex) => (
+                                                <div
+                                                    key={detailIndex}
+                                                    className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 py-4 text-sm sm:text-base "
+                                                >
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="bg-indigo-100 h-12 w-12 rounded-lg flex items-center justify-center">
+                                                            <span className="text-indigo-600 font-bold">
+                                                                {detail.quantity}x
+                                                            </span>
+                                                        </div>
+                                                        <span className="font-medium text-gray-800">
+                                                            {detail.product.name}
+                                                        </span>
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <span className="text-gray-600">
+                                                            ${detail.product.price.toFixed(2)} × {detail.quantity}
+                                                        </span>
+                                                        <div className="font-semibold text-indigo-600">
+                                                            ${(detail.product.price * detail.quantity).toFixed(2)}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        <div className="flex justify-between border-t border-gray-200 pt-4 mt-4">
+                                            <span className="font-semibold text-lg">Total</span>
+                                            <span className="font-bold text-lg text-indigo-700">
+                                                ${order.totalPrice.toFixed(2)}
+                                            </span>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         ))}
                     </div>
-                )) : <p>No orders found.</p>}
+                ) : (
+                    <div className="text-center bg-white p-12 rounded-lg shadow-md border border-gray-200">
+                        <FaHistory className="text-5xl text-indigo-300 mx-auto mb-4" />
+                        <h3 className="text-xl font-semibold text-gray-800 mb-2">No Orders Yet</h3>
+                        <p className="text-gray-600 mb-6">
+                            You haven't placed any orders yet. Start shopping to see your order history.
+                        </p>
+                        <a
+                            href="/shop"
+                            className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium rounded-full shadow-lg hover:shadow-xl transform transition duration-300 hover:scale-105"
+                        >
+                            Shop Now
+                        </a>
+                    </div>
+                )}
             </div>
         </div>
     );

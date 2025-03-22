@@ -1,13 +1,11 @@
-export type ProductType = {
-    id: number;
-    name: string;
-    description: string;
-    price: number;
-    stock: number;
-    imageUrl: string | null;
-};
+
 
 export type Role = {
+    id: number;
+    name: string;
+}
+
+export type ProductType = {
     id: number;
     name: string;
 }
@@ -32,6 +30,7 @@ export type Product = {
     price: number;
     stock: number;
     imageUrl: string | null;
+    productType: ProductType;
 }
 
 export type CartItemId = {

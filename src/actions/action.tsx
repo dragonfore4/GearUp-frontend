@@ -1,5 +1,5 @@
+// "use client";
 "use server";
-import { cookies } from 'next/headers'
 
 // Define the server action for form submission
 export const signinAction = async (prevState: unknown, formData: FormData): Promise<any> => {
@@ -16,12 +16,10 @@ export const signinAction = async (prevState: unknown, formData: FormData): Prom
 
     const data = await response.json();
     if (!response.ok) {
-        return { message: data.message };
+        return { message: data.message, isError: true};
     }
-    const cookieStore = await cookies();
-    cookieStore.set("token", data.token, { path: "/" });
 
-    return { message: data.message, token: data.token, username: data.username };
+    return { message: data.message, token: data.token, username: data.username, isError: false};
 };
 
 export const signupAction = async (prevState: unknown, formData: FormData): Promise<any> => {
@@ -38,10 +36,11 @@ export const signupAction = async (prevState: unknown, formData: FormData): Prom
     })
 
     const data = await response.json();
+    console.log(data.message);
     if (!response.ok) {
-        return { message: data.message };
+        return { message: data.message, isError: true};
     }
 
-    return { message: data.message};
+    return { message: data.message, isError: false};
 };
 

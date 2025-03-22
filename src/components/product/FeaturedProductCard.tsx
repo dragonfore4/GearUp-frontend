@@ -61,7 +61,7 @@ import Link from 'next/link';
 import React from 'react';
 import { FaShoppingCart, FaRegHeart, FaStar } from 'react-icons/fa';
 
-const ProductCard = ({ product }: { product?: Product }) => {
+const FeaturedProductCard = ({ product }: { product?: Product }) => {
     const truncateName = (name?: string, limit = 18) => {
         if (!name) return '';
         return name.length > limit ? `${name.substring(0, limit)}...` : name;
@@ -74,7 +74,7 @@ const ProductCard = ({ product }: { product?: Product }) => {
 
     // console.log(product);
     return (
-        <div className="group h-full w-full sm:w-[45%] lg:w-[22%] ">
+        <div className="group h-full w-full ">
             <Link
                 href={`/products/${product?.id}`}
                 className="block h-full bg-white  rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 transition-all duration-300 ease-out transform hover:-translate-y-2 overflow-hidden"
@@ -93,7 +93,7 @@ const ProductCard = ({ product }: { product?: Product }) => {
                         <div className="flex justify-between items-center">
                             <div className="flex items-center space-x-1">
                                 <FaStar className="text-yellow-400" />
-                                <span className="text-white text-sm font-medium">{(Math.random() * 10).toFixed(2)}</span>
+                                <span className="text-white text-sm font-medium">4.8</span>
                             </div>
                             <div className="flex space-x-2">
                                 <button className="p-2 bg-white rounded-full text-indigo-600 hover:bg-indigo-600 hover:text-white transition-colors duration-300">
@@ -144,4 +144,4 @@ const ProductCard = ({ product }: { product?: Product }) => {
     );
 };
 
-export default ProductCard;
+export default FeaturedProductCard;
