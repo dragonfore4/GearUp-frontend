@@ -7,9 +7,11 @@ import { FaTrash } from "react-icons/fa";
 import { CartItem } from "@/types/type";
 import CheckoutButton from "@/components/cart/CheckoutButton";
 import { useAuth } from "@/context/AuthContext";
+import { useCart } from "@/context/CartContext";
 
 const CartPage = () => {
     const { token, username } = useAuth();
+    const { fetchCart} = useCart();
     const [loading, setLoading] = useState(true);
     const [cartDetails, setCartDetails] = useState<CartItem[]>([]);
     const [userId, setUserId] = useState<number>(0);
@@ -84,6 +86,7 @@ const CartPage = () => {
             credentials: "include"
         });
 
+        await fetchCart(userId);
         setCartDetails(prev => prev.filter(item => item.product.id !== productId));
     };
 

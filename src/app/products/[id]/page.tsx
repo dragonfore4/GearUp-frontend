@@ -5,10 +5,13 @@ import Image from 'next/image';
 import React from 'react';
 import { FaChevronRight } from 'react-icons/fa';
 
-const page = async ({ params }: { params: { id: number } }) => {
+
+export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
 
-    const productResponse = await fetch(`http://localhost:8080/api/products/${id}`);
+    const productResponse = await fetch(`http://localhost:8080/api/products/${id}`, {
+        cache: 'no-store',
+    });
     const product: Product = await productResponse.json();
 
     return (
@@ -87,6 +90,5 @@ const page = async ({ params }: { params: { id: number } }) => {
             </div>
         </div>
     );
-};
+}
 
-export default page;

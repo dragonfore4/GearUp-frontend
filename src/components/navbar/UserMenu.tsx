@@ -13,6 +13,7 @@ import {
 import Link from "next/link";
 import { CartItem } from "@/types/type";
 import CartItemPreview from "../cart/CartItemPreview";
+import { useCart } from "@/context/CartContext";
 
 const UserMenu = () => {
     const { token, username, setToken, setUsername } = useAuth();
@@ -89,7 +90,7 @@ const UserDropdownMenu = ({ username, handleLogout }: { username: string; handle
                     Subscription
                 </DropdownMenuItem>
                 <DropdownMenuSeparator className="bg-gray-100" />
-                <DropdownMenuItem 
+                <DropdownMenuItem
                     onClick={handleLogout}
                     className="px-4 py-2 text-red-500 hover:bg-red-50 cursor-pointer transition-colors duration-200"
                 >
@@ -101,33 +102,7 @@ const UserDropdownMenu = ({ username, handleLogout }: { username: string; handle
 };
 
 const CartDropDownMenu = ({ username }: { username: string | null }) => {
-    const [cartDetails, setCartDetails] = useState([]);
-    const [itemCount, setItemCount] = useState(0);
-
-    useEffect(() => {
-        if (!username) {
-            return;
-        }
-
-        const fetchCartItems = async () => {
-            try {
-                const userResponse = await fetch(`http://localhost:8080/api/users/username/${username}`);
-                const userData = await userResponse.json();
-
-                const cartResponse = await fetch(`http://localhost:8080/api/carts/${userData.id}`);
-                const cartData = await cartResponse.json();
-
-                const cartDetailResponse = await fetch(`http://localhost:8080/api/cartDetail/${cartData.id}/details`);
-                const cartDetailData = await cartDetailResponse.json();
-                
-                setCartDetails(cartDetailData);
-                setItemCount(cartDetailData.length);
-            } catch (error) {
-                console.error("Error occurred while fetching cart items.", error);
-            }
-        }
-        fetchCartItems();
-    }, [username])
+    const { cartDetails, itemCount } = useCart();
 
     return (
         <DropdownMenu>

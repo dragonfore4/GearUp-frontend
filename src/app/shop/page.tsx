@@ -5,7 +5,8 @@ import FilterProducts from '@/components/product/FilterProducts';
 import { FaShoppingBag } from 'react-icons/fa';
 
 const ShopPage = async (
-    { searchParams }: { searchParams: { limit?: number, page?: number, minPrice?: number, maxPrice?: number, productTypeId?: number } }
+    // { searchParams }: { searchParams: { limit?: number, page?: number, minPrice?: number, maxPrice?: number, productTypeId?: number } }
+    { searchParams }: { searchParams: Promise<{ limit?: number, page?: number, minPrice?: number, maxPrice?: number, productTypeId?: number }> }
 ) => {
     const { limit, page, minPrice, maxPrice, productTypeId } = await searchParams;
     

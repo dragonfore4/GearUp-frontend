@@ -1,10 +1,12 @@
 "use client";
 import { useAuth } from "@/context/AuthContext";
+import { useCart } from "@/context/CartContext";
 import React, { useState } from "react";
 import { toast } from "sonner"
 
-const QuantitySelector = ({ productId, stock }: { productId: number, stock: number }) => {
+const QuantitySelector = ({ productId, stock }: { productId: string, stock: number }) => {
     const { username } = useAuth();
+    const { fetchCart } = useCart();
     const [quantity, setQuantity] = useState(1);
 
     const handleDecrease = () => {
@@ -54,9 +56,9 @@ const QuantitySelector = ({ productId, stock }: { productId: number, stock: numb
             if (addToCartResponse.ok) {
                 const addToCartData = await addToCartResponse.json();
                 toast.success("Product added to cart");
+                await fetchCart(userData.id); // Fetch the updated cart details
                 // toast.success("test");
-
-                console.log(addToCartData);
+                // console.log(addToCartData);
 
             }
 
