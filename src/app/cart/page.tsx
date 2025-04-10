@@ -21,16 +21,16 @@ const CartPage = () => {
 
         const fetchCartItems = async () => {
             try {
-                const userResponse = await fetch(`http://localhost:8080/api/users/username/${username}`, {
+                const userResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/username/${username}`, {
                     method: "GET",
                     credentials: "include"
                 });
                 const userData = await userResponse.json();
 
-                const cartResponse = await fetch(`http://localhost:8080/api/carts/${userData.id}`);
+                const cartResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/carts/${userData.id}`);
                 const cartData = await cartResponse.json();
 
-                const cartDetailResponse = await fetch(`http://localhost:8080/api/cartDetail/${cartData.id}/details`);
+                const cartDetailResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/cartDetail/${cartData.id}/details`);
                 const cartDetailData = await cartDetailResponse.json();
 
                 setCartDetails(cartDetailData);
@@ -53,7 +53,7 @@ const CartPage = () => {
             const newQuantity = currentItem.quantity + quantity;
             if (newQuantity < 1 || newQuantity > stock) return;
 
-            const response = await fetch(`http://localhost:8080/api/cartDetail/${cartItemId}/updateProduct`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/cartDetail/${cartItemId}/updateProduct`, {
                 method: "PUT",
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -78,7 +78,7 @@ const CartPage = () => {
     };
 
     const removeItem = async (cartId: number, productId: number) => {
-        await fetch(`http://localhost:8080/api/cartDetail/${cartId}/removeProduct?productId=${productId}`, {
+        await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/cartDetail/${cartId}/removeProduct?productId=${productId}`, {
             method: "DELETE",
             headers: {
                 "Authorization": `Bearer ${token}`,

@@ -1,6 +1,6 @@
 "use client"
 import { CartItem } from '@/types/type';
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useContext, useEffect, useState } from 'react'
 
 interface CartContextValue {
     cartDetails: CartItem[];
@@ -22,7 +22,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
     const fetchCart = async (userId: number) => {
         try {
-            const cartResponse = await fetch(`http://localhost:8080/api/carts/${userId}`, {
+            const cartResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/carts/${userId}`, {
                 method: "GET",
                 credentials: "include",
             });
@@ -33,7 +33,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
             const cartData = await cartResponse.json();
 
 
-            const cartDetailResponse = await fetch(`http://localhost:8080/api/cartDetail/${cartData.id}/details`, {
+            const cartDetailResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/cartDetail/${cartData.id}/details`, {
                 method: "GET",
                 credentials: "include",
             });
@@ -49,7 +49,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
             console.error("Error fetching cart:", error);
         }
     }
-    console.log(cartDetails)
+
     return (
         <CartContext.Provider value={{ cartDetails, itemCount, fetchCart }}>
             {children}

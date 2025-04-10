@@ -19,7 +19,7 @@ const UserMenu = () => {
     const { token, username, setToken, setUsername } = useAuth();
 
     const handleLogout = async () => {
-        await fetch("http://localhost:8080/api/auth/logout", {
+        await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/logout`, {
             method: "POST",
             credentials: "include",
         });
@@ -102,7 +102,26 @@ const UserDropdownMenu = ({ username, handleLogout }: { username: string; handle
 };
 
 const CartDropDownMenu = ({ username }: { username: string | null }) => {
-    const { cartDetails, itemCount } = useCart();
+    const { cartDetails, itemCount, fetchCart } = useCart();
+
+    useEffect(() => {
+        const fetchUserIdByUsername = async () => {
+            if (username) {
+                try {
+                    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/username/${username}`, {
+                        method: "GET",
+                        credentials: "include",
+                    });
+                    const data = await response.json();
+                    // console.log("User ID: ", data.id);
+                    fetchCart(data.id);
+                } catch (error) {
+                    console.error("Error fetching user ID:", error);
+                }
+            }
+        };
+        fetchUserIdByUsername();
+    }, [username])
 
     return (
         <DropdownMenu>

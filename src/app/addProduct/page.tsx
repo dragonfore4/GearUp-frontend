@@ -52,11 +52,11 @@ const AddProductPage = () => {
         }
     
 
-        console.log(name, price, description, stock, productTypeId);
-        console.log(image)
+        // console.log(name, price, description, stock, productTypeId);
+        // console.log(image)
 
         try {
-            const response = await fetch('http://localhost:8080/api/products', {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/products`, {
                 method: 'POST',
                 credentials: 'include',
                 body: formData,

@@ -34,7 +34,7 @@ const ProductContainer = async ({
     let products = null;
 
     try {
-        const response = await fetch("http://localhost:8080/api/products" + query);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/products` + query);
         if (!response.ok) throw new Error("Response not OK");
         products = await response.json();
     } catch (error) {

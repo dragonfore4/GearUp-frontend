@@ -16,9 +16,9 @@ import { toast } from 'sonner'
 const CheckoutButton = ({ userId = 3 }: { userId?: number }) => {
 
     const handleCheckout = async () => {
-        console.log(userId);
+        // console.log(userId);
         try {
-            const response = await fetch(`http://localhost:8080/api/orders/${userId}`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/orders/${userId}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

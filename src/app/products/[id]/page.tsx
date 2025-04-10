@@ -9,7 +9,7 @@ import { FaChevronRight } from 'react-icons/fa';
 export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
 
-    const productResponse = await fetch(`http://localhost:8080/api/products/${id}`, {
+    const productResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/products/${id}`, {
         cache: 'no-store',
     });
     const product: Product = await productResponse.json();

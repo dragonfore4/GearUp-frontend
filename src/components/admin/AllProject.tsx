@@ -15,7 +15,7 @@ const AllProject = () => {
         const fetchProducts = async () => {
             setIsLoading(true);
             try {
-                const response = await fetch(`http://localhost:8080/api/products?page=${page - 1}&limit=10`);
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/products?page=${page - 1}&limit=10`);
                 if (!response.ok) {
                     throw new Error('Failed to load products');
                 }
@@ -48,7 +48,7 @@ const AllProject = () => {
 
         try {
             setIsLoading(true);
-            const response = await fetch(`http://localhost:8080/api/products/${editProductId}`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/products/${editProductId}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -76,7 +76,7 @@ const AllProject = () => {
         if (window.confirm("Are you sure you want to delete this product?")) {
             try {
                 setIsLoading(true);
-                const response = await fetch(`http://localhost:8080/api/products/${id}`, {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/products/${id}`, {
                     method: "DELETE",
                     credentials: "include"
                 });

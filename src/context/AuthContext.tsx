@@ -33,7 +33,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const fetchAuthData = async () => {
             try {
                 // ✅ Fetch Token จาก Cookie
-                const response = await fetch("http://localhost:8080/api/auth/getToken", {
+                // console.log(`hellooo, ${process.env.NEXT_PUBLIC_API_BASE_URL}`);
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/getToken`, {
                     method: "GET",
                     credentials: "include"
                 });
@@ -53,7 +54,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 // console.log("the Token", data.token);
     
                 // ✅ Fetch Claims โดยใช้ data.token แทน token (เพราะ token ยังไม่อัปเดตใน State)
-                const claimsResponse = await fetch("http://localhost:8080/api/auth/getAllClaims", {
+                const claimsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/getAllClaims`, {
                     method: "GET",
                     headers: {
                         "Authorization": `Bearer ${data.token}`  // ✅ ใช้ data.token แทน token
@@ -62,8 +63,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 });
     
                 const claimsData = await claimsResponse.json();
-                setUsername(claimsData.sub);
                 // console.log("Claims data: ", claimsData);
+                setUsername(claimsData.sub);
             } catch (error) {
                 // console.error("Failed to fetch authentication data:", error);
                 return;
@@ -74,6 +75,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         fetchAuthData();
     }, [token, username]);
 
+    // console.log(token, username);
     return (
         <AuthContext.Provider value={{ token, username, setToken, setUsername }}>
             {children}

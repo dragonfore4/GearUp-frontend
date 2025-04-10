@@ -21,12 +21,11 @@ const FormContainer = ({ children, action, className = "" }: FormContainerProps)
 
 
     useEffect(() => {
-        console.log("in state", state.message);
+        // console.log("in state", state.message);
         if (state.token !== null || undefined) {
             setToken(state.token);
             setUsername(state.username);
         }
-        console.log("in state", state.message);
         if (!state.isError && state.message !== "") {
             toast.success(state.message);
         }

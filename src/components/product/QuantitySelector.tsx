@@ -32,17 +32,17 @@ const QuantitySelector = ({ productId, stock }: { productId: string, stock: numb
                 return;
             }
 
-            const userResponse = await fetch(`http://localhost:8080/api/users/username/${username}`);
+            const userResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/username/${username}`);
             const userData = await userResponse.json();
 
-            const cartResponse = await fetch(`http://localhost:8080/api/carts/${userData.id}`);
+            const cartResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/carts/${userData.id}`);
             const cartData = await cartResponse.json();
 
             if (quantity > stock) {
                 toast.error("Quantity exceeds stock");
                 return;
             }
-            const addToCartResponse = await fetch(`http://localhost:8080/api/cartDetail/${cartData.id}/addProduct`, {
+            const addToCartResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/cartDetail/${cartData.id}/addProduct`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
