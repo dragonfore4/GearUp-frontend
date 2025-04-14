@@ -16,6 +16,19 @@ const ProductContainer = async ({
     maxPrice?: number,
     productTypeId?: number,
 }) => {
+    let baseUrl;
+    console.log("=== Enter ProductContainer function ===");
+
+    if (typeof window === 'undefined') {
+        baseUrl = process.env.API_BASE_URL;
+        console.log("Running on server, using:" , baseUrl); // debug
+    }
+    else {
+        // Client-side: เข้าถึงจาก browser
+        baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL; // ควรเป็น http://localhost:8080
+        console.log("Running on client, using:", baseUrl);
+    }
+
     let query = "";
 
     if (page) {
@@ -34,7 +47,7 @@ const ProductContainer = async ({
     let products = null;
 
     try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/products` + query);
+        const response = await fetch(`${baseUrl}/api/products` + query);
         if (!response.ok) throw new Error("Response not OK");
         products = await response.json();
     } catch (error) {
@@ -43,6 +56,7 @@ const ProductContainer = async ({
             <div className="w-full flex justify-center items-center py-16">
                 <div className="text-red-500 bg-red-50 px-6 py-4 rounded-lg border border-red-200 shadow-sm">
                     Failed to connect to the server. Please try again later.
+                    <p className="text-xs text-gray-400">API_BASE_URL: {baseUrl}</p>
                 </div>
             </div>
         );

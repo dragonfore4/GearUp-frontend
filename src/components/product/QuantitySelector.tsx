@@ -32,10 +32,16 @@ const QuantitySelector = ({ productId, stock }: { productId: string, stock: numb
                 return;
             }
 
-            const userResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/username/${username}`);
+            const userResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/username/${username}`, {
+                credentials: "include",
+            });
             const userData = await userResponse.json();
 
-            const cartResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/carts/${userData.id}`);
+            console.log("hello", userData)
+
+            const cartResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/carts/${userData.id}`, {
+                credentials: "include",
+            });
             const cartData = await cartResponse.json();
 
             if (quantity > stock) {
@@ -77,7 +83,7 @@ const QuantitySelector = ({ productId, stock }: { productId: string, stock: numb
             </div>
 
             {/* Add to Cart Button */}
-            <button className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full font-medium shadow-md hover:shadow-lg transition duration-300 hover:scale-105" onClick={handleSubmit}>
+            <button className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full font-medium shadow-md hover:shadow-lg transition duration-300 hover:scale-105 cursor-pointer" onClick={handleSubmit}>
                 Add to Cart
             </button>
 

@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  ecommerce-frontend:
+    container_name: ecommerce-frontend
+    build: 
+      context: .
+      args:
+        NEXT_PUBLIC_API_BASE_URL: https://ecommerce.api.sirasith.net
+        API_BASE_URL: https://ecommerce.api.sirasith.net
+    ports:
+      - "3000:3000"
+    environment:
+       NEXT_PUBLIC_API_BASE_URL: https://ecommerce.api.sirasith.net
+       API_BASE_URL: https://ecommerce.api.sirasith.net
+    networks:
+      - app-network
+
+networks:
+  app-network:

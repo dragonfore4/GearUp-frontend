@@ -33,7 +33,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const fetchAuthData = async () => {
             try {
                 // ✅ Fetch Token จาก Cookie
-                // console.log(`hellooo, ${process.env.NEXT_PUBLIC_API_BASE_URL}`);
                 const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/getToken`, {
                     method: "GET",
                     credentials: "include"
