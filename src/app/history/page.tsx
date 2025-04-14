@@ -20,7 +20,9 @@ const HistoryPage = () => {
 
             try {
                 setLoading(true);
-                const userIdResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/username/${username}`);
+                const userIdResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/username/${username}`, {
+                    credentials: 'include',
+                });
 
                 if (!userIdResponse.ok) {
                     throw new Error('Failed to fetch user information');
@@ -29,7 +31,9 @@ const HistoryPage = () => {
                 const userIdData = await userIdResponse.json();
                 setUserId(userIdData.id);
 
-                const orderResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/orders/user/${userIdData.id}`);
+                const orderResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/orders/user/${userIdData.id}`, {
+                    credentials: 'include',
+                });
 
                 if (!orderResponse.ok) {
                     throw new Error('Failed to fetch orders');
@@ -56,7 +60,9 @@ const HistoryPage = () => {
 
         try {
             setDetailLoading(true);
-            const orderDetailResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/orders/${orderId}/details`);
+            const orderDetailResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/orders/${orderId}/details`, {
+                credentials: 'include',
+            });
 
             if (!orderDetailResponse.ok) {
                 throw new Error('Failed to fetch order details');
