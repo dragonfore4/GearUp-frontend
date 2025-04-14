@@ -28,6 +28,7 @@ const FilterProducts = () => {
         } else {
             params.delete(name);
         }
+        params.set('page', '1'); // Reset to first page on filter change
         
         // Update active filters state
         setActiveFilters(prev => ({
