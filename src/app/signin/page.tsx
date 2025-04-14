@@ -69,7 +69,7 @@ const SignInPage = () => {
                     {/* OAuth Button */}
                     <a
                         href={`${process.env.NEXT_PUBLIC_API_BASE_URL}/oauth2/authorization/google`}
-                        className="w-full py-3 bg-white border border-gray-300 text-gray-700 text-lg font-medium rounded-lg shadow-md hover:shadow-lg flex items-center justify-center transition-transform hover:scale-105"
+                        className="w-full py-3 bg-white border border-gray-300 text-gray-700 text-lg font-medium rounded-lg shadow-md hover:shadow-lg flex items-center justify-center transition-transform hover:scale-105 duration-300"
                     >
                         <svg className="w-5 h-5 mr-2" viewBox="0 0 48 48">
                             <path
