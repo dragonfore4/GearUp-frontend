@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { FiEdit2, FiTrash2, FiChevronLeft, FiChevronRight, FiX, FiSave } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
 
 const AllProject = () => {
     const [data, setData] = useState<any>(null);
@@ -56,10 +57,10 @@ const AllProject = () => {
                 body: JSON.stringify(updatedProduct),
                 credentials: "include"
             });
-            
+
             if (response.ok) {
                 // Update the product in the local state to avoid refetching
-                setProducts(products.map(product => 
+                setProducts(products.map(product =>
                     product.id === editProductId ? updatedProduct : product
                 ));
                 setEditProductId(null);
@@ -80,7 +81,7 @@ const AllProject = () => {
                     method: "DELETE",
                     credentials: "include"
                 });
-                
+
                 if (response.ok) {
                     // Remove the product from the local state
                     setProducts(products.filter(product => product.id !== id));
@@ -114,7 +115,7 @@ const AllProject = () => {
     };
 
     return (
-        <motion.div 
+        <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className='h-full relative p-6 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg shadow-sm'
@@ -127,13 +128,15 @@ const AllProject = () => {
                         {data?.totalItems || 0} Total Products
                     </p>
                 </div>
-                <div className='mt-4 sm:mt-0'>
-                    <button className='bg-indigo-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-indigo-700 transition-all flex items-center'>
-                        <span className='mr-2'>Add Product</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
-                        </svg>
-                    </button>
+                <div className='mt-4 sm:mt-0 cursor-pointer'>
+                    <Link href="/addProduct" >
+                        <button className='bg-indigo-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-indigo-700 transition-all flex items-center cursor-pointer'>
+                            <span className='mr-2'>Add Product</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
+                            </svg>
+                        </button>
+                    </Link>
                 </div>
             </div>
 
@@ -160,7 +163,7 @@ const AllProject = () => {
                         </thead>
                         <tbody className='divide-y divide-gray-200'>
                             {products.map((product: any) => (
-                                <motion.tr 
+                                <motion.tr
                                     key={product.id}
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
@@ -240,13 +243,13 @@ const AllProject = () => {
             {/* Edit Modal */}
             <AnimatePresence>
                 {editProductId && (
-                    <motion.div 
+                    <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
                     >
-                        <motion.div 
+                        <motion.div
                             initial={{ scale: 0.9, y: 20 }}
                             animate={{ scale: 1, y: 0 }}
                             exit={{ scale: 0.9, y: 20 }}
