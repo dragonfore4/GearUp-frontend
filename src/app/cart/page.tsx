@@ -4,16 +4,14 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { FaTrash } from "react-icons/fa";
-import { CartItem } from "@/types/type";
 import CheckoutButton from "@/components/cart/CheckoutButton";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 
 const CartPage = () => {
     const { token, username } = useAuth();
-    const { fetchCart} = useCart();
+    const { cartDetails, fetchCart } = useCart();
     const [loading, setLoading] = useState(true);
-    const [cartDetails, setCartDetails] = useState<CartItem[]>([]);
     const [userId, setUserId] = useState<number>(0);
 
     useEffect(() => {
@@ -23,18 +21,12 @@ const CartPage = () => {
             try {
                 const userResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/username/${username}`, {
                     method: "GET",
-                    credentials: "include"
+                    credentials: "include",
                 });
                 const userData = await userResponse.json();
 
-                const cartResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/carts/${userData.id}`);
-                const cartData = await cartResponse.json();
-
-                const cartDetailResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/cartDetail/${cartData.id}/details`);
-                const cartDetailData = await cartDetailResponse.json();
-
-                setCartDetails(cartDetailData);
                 setUserId(userData.id);
+                await fetchCart(userData.id);
             } catch (error) {
                 console.error("Error occurred while fetching cart items.", error);
             } finally {
@@ -63,31 +55,27 @@ const CartPage = () => {
             });
 
             if (!response.ok) throw new Error("Failed to update quantity.");
-            const updatedItem = await response.json();
 
-            setCartDetails(prev =>
-                prev.map(item =>
-                    item.cart.id === cartItemId && item.product.id === productId
-                        ? { ...item, quantity: updatedItem.quantity }
-                        : item
-                )
-            );
+            await fetchCart(userId); // รีเฟรช cart context
         } catch (error) {
             console.error("Error updating quantity:", error);
         }
     };
 
     const removeItem = async (cartId: number, productId: number) => {
-        await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/cartDetail/${cartId}/removeProduct?productId=${productId}`, {
-            method: "DELETE",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-            },
-            credentials: "include"
-        });
+        try {
+            await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/cartDetail/${cartId}/removeProduct?productId=${productId}`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                },
+                credentials: "include",
+            });
 
-        await fetchCart(userId);
-        setCartDetails(prev => prev.filter(item => item.product.id !== productId));
+            await fetchCart(userId);
+        } catch (error) {
+            console.error("Error removing item:", error);
+        }
     };
 
     const totalPrice = cartDetails.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
@@ -172,5 +160,3 @@ const CartPage = () => {
 };
 
 export default CartPage;
-
-
