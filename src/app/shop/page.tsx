@@ -6,9 +6,9 @@ import { FaShoppingBag } from 'react-icons/fa';
 
 const ShopPage = async (
     // { searchParams }: { searchParams: { limit?: number, page?: number, minPrice?: number, maxPrice?: number, productTypeId?: number } }
-    { searchParams }: { searchParams: Promise<{ limit?: number, page?: number, minPrice?: number, maxPrice?: number, productTypeId?: number }> }
+    { searchParams }: { searchParams: Promise<{ limit?: number, page?: number, minPrice?: number, maxPrice?: number, productTypeId?: number, sortBy?: string  }> }
 ) => {
-    const { limit, page, minPrice, maxPrice, productTypeId } = await searchParams;
+    const { limit, page, minPrice, maxPrice, productTypeId, sortBy } = await searchParams;
     
     return (
         <div className="min-h-screen bg-gray-50">
@@ -53,7 +53,8 @@ const ShopPage = async (
                     page={page} 
                     minPrice={minPrice} 
                     maxPrice={maxPrice} 
-                    productTypeId={productTypeId} 
+                    productTypeId={productTypeId}
+                    sortBy={sortBy}
                 />
             </div>
         </div>

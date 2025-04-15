@@ -8,6 +8,7 @@ const ProductContainer = async ({
     minPrice = 0,
     maxPrice = 1000000,
     productTypeId = 0,
+    sortBy = ""
 }: {
     slice?: number,
     limit?: number,
@@ -15,6 +16,7 @@ const ProductContainer = async ({
     minPrice?: number,
     maxPrice?: number,
     productTypeId?: number,
+    sortBy?: string,
 }) => {
     let baseUrl;
     console.log("=== Enter ProductContainer function ===");
@@ -42,6 +44,10 @@ const ProductContainer = async ({
     }
     if (productTypeId !== 0 && productTypeId != null) {
         query += `&productTypeId=${productTypeId}`;
+    }
+
+    if (sortBy) {
+        query += `&sortBy=${sortBy}`;
     }
 
     let products = null;
