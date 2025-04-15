@@ -47,6 +47,7 @@ export type CartItem = {
 
 export type Order = {
     id: number;
+    createdAt: string;
     status: string;
     totalPrice: number;
     user: User;

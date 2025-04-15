@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Order, OrderDetail } from '@/types/type';
 import { useAuth } from '@/context/AuthContext';
-import { FaChevronDown, FaChevronUp, FaHistory, FaSpinner } from 'react-icons/fa';
+import { FaChevronDown, FaChevronUp, FaHistory, FaSpinner, FaClock } from 'react-icons/fa';
 
 const HistoryPage = () => {
     const { token, username } = useAuth();
@@ -79,13 +79,19 @@ const HistoryPage = () => {
         }
     };
 
-    const formatDate = (dateString: string) => {
+    const formatDateTime = (dateString: string) => {
         const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
+        return {
+            date: date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            }),
+            time: date.toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit'
+            })
+        };
     };
 
     return (
@@ -114,86 +120,96 @@ const HistoryPage = () => {
                     </div>
                 ) : orders.length > 0 ? (
                     <div className="space-y-6">
-                        {orders.map((order, index) => (
-                            <div
-                                key={order.id}
-                                className="bg-white rounded-xl shadow-md border border-gray-200 hover:border-indigo-400 transition-all duration-300 overflow-hidden"
-                            >
+                        {orders.map((order, index) => {
+                            const { date, time } = formatDateTime(order.createdAt);
+                            return (
                                 <div
-                                    onClick={() => handleOpenOrderDetail(index, order.id)}
-                                    className="flex justify-between items-center px-6 py-5 cursor-pointer"
+                                    key={order.id}
+                                    className="bg-white rounded-xl shadow-md border border-gray-200 hover:border-indigo-400 transition-all duration-300 overflow-hidden"
                                 >
-                                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6">
-                                        <span className="text-base sm:text-lg font-semibold text-gray-800">
-                                            Order #{order.id}
-                                        </span>
-                                    
-                                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${order.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
-                                            order.status === 'PROCESSING' ? 'bg-blue-100 text-blue-800' :
+                                    <div
+                                        onClick={() => handleOpenOrderDetail(index, order.id)}
+                                        className="flex justify-between items-center px-6 py-5 cursor-pointer"
+                                    >
+                                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6">
+                                            <span className="text-base sm:text-lg font-semibold text-gray-800">
+                                                Order #{order.id}
+                                            </span>
+                                            
+                                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                                                order.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
+                                                order.status === 'PROCESSING' ? 'bg-blue-100 text-blue-800' :
                                                 order.status === 'CANCELLED' ? 'bg-red-100 text-red-800' :
-                                                    'bg-gray-100 text-gray-800'
+                                                'bg-gray-100 text-gray-800'
                                             }`}>
-                                            {order.status}
-                                        </span>
-                                        <span className="text-sm font-medium text-indigo-600">
-                                            ${order.totalPrice.toFixed(2)}
-                                        </span>
-                                    </div>
-                                    <div className="flex items-center gap-2 text-indigo-600">
-                                        {detailLoading && expanded === null ? (
-                                            <FaSpinner className="animate-spin" />
-                                        ) : (
-                                            <>
-                                                {expanded === index ? <FaChevronUp /> : <FaChevronDown />}
-                                                <span className="hover:underline font-medium text-sm sm:text-base">
-                                                    {expanded === index ? 'Hide' : 'View'} Details
-                                                </span>
-                                            </>
-                                        )}
-                                    </div>
-                                </div>
-
-                                {expanded === index && orderDetail && (
-                                    <div className="bg-gray-50 px-6 py-5 space-y-4 border-t border-gray-200 animate-fade-in ">
-                                        <h3 className="font-semibold text-gray-800 text-lg">Order Items</h3>
-                                        <div className="divide-y divide-gray-200">
-                                            {orderDetail.map((detail, detailIndex) => (
-                                                <div
-                                                    key={detailIndex}
-                                                    className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 py-4 text-sm sm:text-base "
-                                                >
-                                                    <div className="flex items-center gap-4">
-                                                        <div className="bg-indigo-100 h-12 w-12 rounded-lg flex items-center justify-center">
-                                                            <span className="text-indigo-600 font-bold">
-                                                                {detail.quantity}x
-                                                            </span>
-                                                        </div>
-                                                        <span className="font-medium text-gray-800">
-                                                            {detail.product.name}
-                                                        </span>
-                                                    </div>
-                                                    <div className="text-right">
-                                                        <span className="text-gray-600">
-                                                            ${detail.product.price.toFixed(2)} × {detail.quantity}
-                                                        </span>
-                                                        <div className="font-semibold text-indigo-600">
-                                                            ${(detail.product.price * detail.quantity).toFixed(2)}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-
-                                        <div className="flex justify-between border-t border-gray-200 pt-4 mt-4">
-                                            <span className="font-semibold text-lg">Total</span>
-                                            <span className="font-bold text-lg text-indigo-700">
+                                                {order.status}
+                                            </span>
+                                            <span className="text-sm font-medium text-indigo-600">
                                                 ${order.totalPrice.toFixed(2)}
                                             </span>
                                         </div>
+                                        <div className="flex items-center gap-2 text-indigo-600">
+                                            {detailLoading && expanded === null ? (
+                                                <FaSpinner className="animate-spin" />
+                                            ) : (
+                                                <>
+                                                    {expanded === index ? <FaChevronUp /> : <FaChevronDown />}
+                                                    <span className="hover:underline font-medium text-sm sm:text-base">
+                                                        {expanded === index ? 'Hide' : 'View'} Details
+                                                    </span>
+                                                </>
+                                            )}
+                                        </div>
                                     </div>
-                                )}
-                            </div>
-                        ))}
+
+                                    {/* Date and Time section */}
+                                    <div className="bg-gray-50 px-6 py-2 border-t border-gray-200 flex items-center gap-2 text-gray-600">
+                                        <FaClock className="text-indigo-500" />
+                                        <span className="text-sm">{date} at {time}</span>
+                                    </div>
+
+                                    {expanded === index && orderDetail && (
+                                        <div className="bg-gray-50 px-6 py-5 space-y-4 border-t border-gray-200 animate-fade-in">
+                                            <h3 className="font-semibold text-gray-800 text-lg">Order Items</h3>
+                                            <div className="divide-y divide-gray-200">
+                                                {orderDetail.map((detail, detailIndex) => (
+                                                    <div
+                                                        key={detailIndex}
+                                                        className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 py-4 text-sm sm:text-base"
+                                                    >
+                                                        <div className="flex items-center gap-4">
+                                                            <div className="bg-indigo-100 h-12 w-12 rounded-lg flex items-center justify-center">
+                                                                <span className="text-indigo-600 font-bold">
+                                                                    {detail.quantity}x
+                                                                </span>
+                                                            </div>
+                                                            <span className="font-medium text-gray-800">
+                                                                {detail.product.name}
+                                                            </span>
+                                                        </div>
+                                                        <div className="text-right">
+                                                            <span className="text-gray-600">
+                                                                ${detail.product.price.toFixed(2)} × {detail.quantity}
+                                                            </span>
+                                                            <div className="font-semibold text-indigo-600">
+                                                                ${(detail.product.price * detail.quantity).toFixed(2)}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+
+                                            <div className="flex justify-between border-t border-gray-200 pt-4 mt-4">
+                                                <span className="font-semibold text-lg">Total</span>
+                                                <span className="font-bold text-lg text-indigo-700">
+                                                    ${order.totalPrice.toFixed(2)}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })}
                     </div>
                 ) : (
                     <div className="text-center bg-white p-12 rounded-lg shadow-md border border-gray-200">
