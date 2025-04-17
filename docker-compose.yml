@@ -8,6 +8,7 @@ services:
       args:
         NEXT_PUBLIC_API_BASE_URL: https://ecommerce.api.sirasith.net
         API_BASE_URL: https://ecommerce.api.sirasith.net
+    image: ecommerce-frontend
     ports:
       - "3000:3000"
     environment:
